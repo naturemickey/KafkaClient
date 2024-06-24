@@ -15,10 +15,7 @@ import kafka.client.serialization.JsonDeserializer;
  •	session.timeout.ms：Consumer 与 broker 之间的会话超时时间，默认为 10000 毫秒。
  •	heartbeat.interval.ms：Consumer 向 broker 发送心跳的时间间隔，默认为 3000 毫秒。
  自动提交相关配置
- •	enable.auto.commit：是否自动提交偏移量，默认为 true。
  •	auto.commit.interval.ms：自动提交偏移量的时间间隔，默认为 5000 毫秒。
- 偏移量管理相关配置
- •	auto.offset.reset：当没有初始偏移量或偏移量超出范围时该如何处理，有效值为 earliest、latest 和 none。默认为 latest。
  错误处理相关配置
  •	isolation.level：Consumer 读取消息的隔离级别，read_committed 仅读取已提交的消息，read_uncommitted 读取所有消息。默认为 read_uncommitted。
  •	retry.backoff.ms：Consumer 在尝试获取元数据或分区领导者信息失败后等待的时间，默认为 100 毫秒。
@@ -46,4 +43,5 @@ public class Config {
 }
 
 class OptionalConfig {
+    public String auto_offset_reset = "earliest"; // earliest/latest/none
 }

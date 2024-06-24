@@ -14,7 +14,6 @@ import kafka.client.serialization.JsonSerializer;
  * 	•	linger.ms：Producer 发送消息前等待更多消息加入批次的时间，默认为 0 毫秒。
  * 	•	buffer.memory：Producer 用来缓冲等待发送消息的总内存大小，默认为 33554432（32MB）。
  * 事务相关配置
- * 	•	transactional.id：用于启用事务的唯一标识符。
  * 	•	transaction.timeout.ms：事务的超时时间，默认为 60000 毫秒（60秒）。
  * 错误处理相关配置
  * 	•	max.in.flight.requests.per.connection：每个连接最多未确认请求数，默认为 5。设置过高可能影响消息顺序。
@@ -40,4 +39,5 @@ public class Config {
 }
 
 class OptionalConfig {
+    public boolean enable_idempotence = false; // 是否启用幂等性，默认为 false。设置为 true 可以确保消息不重复发送。
 }

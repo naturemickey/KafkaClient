@@ -29,6 +29,11 @@ public class KafkaProducerFactory {
             props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, config.key_serializer.getName());
             props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, config.value_serializer.getName());
             props.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, UUID.randomUUID().toString());
+            if (config.optional != null) {
+                if (config.optional.enable_idempotence) {
+                    props.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, "true");
+                }
+            }
 
             this.producer = new org.apache.kafka.clients.producer.KafkaProducer<>(props);
             this.producer.initTransactions();

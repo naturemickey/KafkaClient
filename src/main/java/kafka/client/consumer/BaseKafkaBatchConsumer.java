@@ -21,6 +21,9 @@ public abstract class BaseKafkaBatchConsumer<T> {
         props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, config.value_deserializer.getName());
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
         props.put(ConfigConstants.VALUE_DESERIALIZER_CLASS, getValueClass());
+        if (config.optional != null) {
+            props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, config.optional.auto_offset_reset);
+        }
 
         this.listener = () -> {
             KafkaConsumer<String, T> consumer = new KafkaConsumer<>(props);
