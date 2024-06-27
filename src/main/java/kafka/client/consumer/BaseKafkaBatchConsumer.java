@@ -3,6 +3,8 @@ package kafka.client.consumer;
 import kafka.client.ConfigConstants;
 import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.TopicPartition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -10,6 +12,8 @@ import java.time.Duration;
 import java.util.*;
 
 public abstract class BaseKafkaBatchConsumer<T> {
+
+    private static Logger logger = LoggerFactory.getLogger(BaseKafkaBatchConsumer.class);
 
     public abstract void receive(List<T> messages);
 
@@ -32,23 +36,19 @@ public abstract class BaseKafkaBatchConsumer<T> {
             while (true) {
                 try {
                     ConsumerRecords<String, T> records = consumer.poll(Duration.ofMillis(100));
+                    Map<TopicPartition, OffsetAndMetadata> offsets = new HashMap<>();
                     List<T> dataList = new ArrayList<>();
 
                     for (ConsumerRecord<String, T> record : records) {
                         dataList.add(record.value());
-                    }
-
-                    this.receive(dataList);
-
-                    // 手动提交偏移量
-                    Map<TopicPartition, OffsetAndMetadata> offsets = new HashMap<>();
-                    for (ConsumerRecord<String, T> record : records) {
                         offsets.put(new TopicPartition(record.topic(), record.partition()),
                                 new OffsetAndMetadata(record.offset() + 1, null));
                     }
+
+                    this.receive(dataList);
                     consumer.commitSync(offsets);
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("", e);
                 }
             }
         };
