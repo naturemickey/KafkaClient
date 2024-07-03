@@ -26,5 +26,5 @@ public abstract class BaseKafkaConcurrentConsumer<T> extends BaseKafkaBatchConsu
         });
     }
 
-    public abstract void receive(T messages);
+    public abstract void receive(T message);
 }
